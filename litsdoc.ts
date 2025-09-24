@@ -297,7 +297,7 @@ async function processMarkdown(content: string): Promise<string> {
  */
 const SHIKI_TRANSFORMERS = [{
   pre(node: any) {
-    node.properties.class = 'text-sm leading-relaxed overflow-x-auto';
+    node.properties.class = 'text-sm leading-relaxed overflow-x-auto text-white';
     node.properties.style = 'background-color: transparent; padding: 0; margin: 0;';
   },
   code(node: any) {
@@ -317,7 +317,7 @@ async function highlightCode(code: string, language: string): Promise<string> {
       theme: 'github-dark', 
       transformers: SHIKI_TRANSFORMERS
     }),
-    () => Promise.resolve(`<pre class="text-sm leading-relaxed overflow-x-auto"><code>${
+    () => Promise.resolve(`<pre class="text-sm leading-relaxed overflow-x-auto text-white"><code>${
       code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     }</code></pre>`)
   ];
