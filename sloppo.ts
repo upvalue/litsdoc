@@ -93,6 +93,9 @@ const HTML_TEMPLATE = `<!DOCTYPE html>
       color: #374151;
       max-width: none;
     }
+    .prose h1:first-of-type, .prose h2:first-of-type, .prose h3:first-of-type, .prose h4:first-of-type, .prose h5:first-of-type, .prose h6:first-of-type {
+      margin-top: 0;
+    }
     .prose h1 {
       font-size: 1.5rem;
       font-weight: 700;
@@ -288,142 +291,75 @@ async function processMarkdown(content: string): Promise<string> {
 /**
  * ## Syntax Highlighting
  * 
- * Applies VS Code-quality syntax highlighting to code blocks using Shiki.
- * Automatically detects the programming language and applies the appropriate
- * grammar. Uses the GitHub Dark theme for consistency with the dark code
- * background in the generated documentation.
- * 
- * For unsupported languages, gracefully falls back to 'text' highlighting,
- * which provides clean plain text display without syntax errors.
+ * Applies VS Code-quality syntax highlighting using Shiki with fallback strategies.
+ * Uses GitHub Dark theme with custom transformers for consistent styling.
  */
+const SHIKI_TRANSFORMERS = [{
+  pre(node: any) {
+    node.properties.class = 'text-sm leading-relaxed overflow-x-auto';
+    node.properties.style = 'background-color: transparent; padding: 0; margin: 0;';
+  },
+  code(node: any) {
+    node.properties.style = 'background-color: transparent;';
+  }
+}];
+
 async function highlightCode(code: string, language: string): Promise<string> {
-  try {
-    // First try the mapped language, then fall back to 'text'
-    const shikiLanguage = SHIKI_LANGUAGE_MAP[language] || 'text';
-    
-    const html = await codeToHtml(code, {
-      lang: shikiLanguage,
+  const strategies = [
+    () => codeToHtml(code, {
+      lang: SHIKI_LANGUAGE_MAP[language] || 'text',
       theme: 'github-dark',
-      transformers: [
-        {
-          pre(node) {
-            // Remove default Shiki classes and add our own
-            node.properties.class = 'text-sm leading-relaxed overflow-x-auto';
-            node.properties.style = 'background-color: transparent; padding: 0; margin: 0;';
-          },
-          code(node) {
-            // Ensure code maintains proper styling
-            node.properties.style = 'background-color: transparent;';
-          }
-        }
-      ]
-    });
-    
-    return html;
-  } catch (error) {
-    console.warn(`Failed to highlight code for language ${language}, trying text fallback:`, error.message);
-    
-    // Try again with explicit 'text' language as final fallback
+      transformers: SHIKI_TRANSFORMERS
+    }),
+    () => codeToHtml(code, {
+      lang: 'text',
+      theme: 'github-dark', 
+      transformers: SHIKI_TRANSFORMERS
+    }),
+    () => Promise.resolve(`<pre class="text-sm leading-relaxed overflow-x-auto"><code>${
+      code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    }</code></pre>`)
+  ];
+  
+  for (const [i, strategy] of strategies.entries()) {
     try {
-      const html = await codeToHtml(code, {
-        lang: 'text',
-        theme: 'github-dark',
-        transformers: [
-          {
-            pre(node) {
-              node.properties.class = 'text-sm leading-relaxed overflow-x-auto';
-              node.properties.style = 'background-color: transparent; padding: 0; margin: 0;';
-            },
-            code(node) {
-              node.properties.style = 'background-color: transparent;';
-            }
-          }
-        ]
-      });
-      return html;
-    } catch (fallbackError) {
-      console.warn(`Shiki fallback also failed, using manual HTML escape:`, fallbackError.message);
-      
-      // Final fallback: HTML-escaped plain text with proper pre/code structure
-      const escapedCode = code
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-      return `<pre class="text-sm leading-relaxed overflow-x-auto"><code>${escapedCode}</code></pre>`;
+      return await strategy();
+    } catch (error) {
+      if (i < strategies.length - 1) {
+        console.warn(`Highlight strategy ${i + 1} failed, trying fallback:`, (error as Error).message);
+      }
     }
   }
+  
+  throw new Error('All highlighting strategies failed');
 }
 
 /**
  * ## Argument File Parser
  * 
- * Reads and parses arguments from a configuration file.
- * Supports quoted strings with spaces and handles multi-line argument files.
- * This allows complex configurations to be saved and reused.
+ * Reads and parses arguments from a configuration file using regex.
+ * Supports quoted strings with spaces for complex configurations.
  */
 async function parseArgsFromFile(argfilePath: string): Promise<string[]> {
   try {
     const content = await Deno.readTextFile(argfilePath);
-    // Split by whitespace but preserve quoted strings
-    const args: string[] = [];
-    const tokens = content.trim().split(/\s+/);
-    let currentArg = '';
-    let inQuotes = false;
-    let quoteChar = '';
-
-    for (const token of tokens) {
-      if (!inQuotes) {
-        // Check if this token starts a quoted string
-        if ((token.startsWith('"') || token.startsWith("'")) && token.length > 1) {
-          quoteChar = token[0];
-          if (token.endsWith(quoteChar) && token.length > 1) {
-            // Complete quoted string in one token
-            args.push(token.slice(1, -1));
-          } else {
-            // Start of quoted string
-            inQuotes = true;
-            currentArg = token.slice(1);
-          }
-        } else {
-          // Regular unquoted argument
-          args.push(token);
-        }
-      } else {
-        // We're inside quotes
-        if (token.endsWith(quoteChar)) {
-          // End of quoted string
-          currentArg += ' ' + token.slice(0, -1);
-          args.push(currentArg);
-          currentArg = '';
-          inQuotes = false;
-          quoteChar = '';
-        } else {
-          // Continue building quoted string
-          currentArg += ' ' + token;
-        }
-      }
-    }
-
-    // Handle unclosed quotes
-    if (inQuotes) {
-      args.push(currentArg);
-    }
-
-    return args;
+    return content.trim().match(/(?:[^\s"']+|"[^"]*"|'[^']*')+/g)
+      ?.map(s => s.replace(/^["']|["']$/g, '')) || [];
   } catch (error) {
     console.error(`Error reading argfile '${argfilePath}': ${error.message}`);
     Deno.exit(1);
   }
 }
 
+
 /**
- * ## Command Line Argument Parser
+ * ## Unified Command Line Argument Parser
  * 
- * Parses command-line arguments using Deno's standard CLI parser.
- * Handles all options including help, version, file inputs, and configuration.
- * When an argfile is specified, returns a marker for async file reading.
+ * Handles both direct CLI arguments and argfile-based configuration.
+ * When an argfile is specified, reads arguments from the file and
+ * parses them as if they were provided on the command line.
  */
-function parseCommandLineArgs(): CommandLineOptions {
+async function parseCommandLineArgs(): Promise<CommandLineOptions> {
   // First check if --argfile is specified
   const initialArgs = parseArgs(Deno.args, {
     string: ["argfile"],
@@ -432,17 +368,10 @@ function parseCommandLineArgs(): CommandLineOptions {
 
   let argsToProcess = Deno.args;
 
-  // If argfile is specified, read arguments from file instead
+  // If argfile is specified, read arguments from file
   if (initialArgs.argfile) {
     console.log(`Reading arguments from: ${initialArgs.argfile}`);
-    // We need to await the file read, so we'll handle this differently
-    // For now, we'll return a special marker and handle argfile in main()
-    return {
-      files: [],
-      argfile: initialArgs.argfile as string,
-      help: false,
-      version: false
-    };
+    argsToProcess = await parseArgsFromFile(initialArgs.argfile as string);
   }
 
   const args = parseArgs(argsToProcess, {
@@ -522,64 +451,50 @@ Examples:
 }
 
 /**
- * ## Enhanced Argument Parser with Argfile Support
+ * ## Comment Content Extraction Patterns
  * 
- * Wraps the basic argument parser to add argfile support.
- * If an argfile is specified, reads arguments from the file and
- * parses them as if they were provided on the command line.
+ * Pattern matching for different comment styles to enable language-agnostic parsing.
  */
-async function parseCommandLineArgsWithArgfile(): Promise<CommandLineOptions> {
-  const initialOptions = parseCommandLineArgs();
-  
-  // If argfile is specified, read from file
-  if (initialOptions.argfile) {
-    const fileArgs = await parseArgsFromFile(initialOptions.argfile);
-    
-    const args = parseArgs(fileArgs, {
-      boolean: ["help", "version", "stdout"],
-      string: ["output-html", "code-url", "title", "description"],
-      alias: {
-        "help": "h",
-        "version": "v",
-        "output-html": "o",
-        "code-url": "u",
-        "title": "t",
-        "description": "d",
-        "stdout": "s"
-      },
-      default: {
-        "help": false,
-        "version": false,
-        "stdout": false
-      }
-    });
-
-    if (args._.length < 1) {
-      console.error('Error: At least one input file is required in argfile');
-      Deno.exit(1);
-    }
-
-    const files = args._.map(f => String(f));
-    const outputHtml = args["output-html"] || files[0].replace(/\.[^.]+$/, '.html');
-    const codeUrl = args["code-url"];
-    const title = args["title"];
-    const description = args["description"];
-    const stdout = args["stdout"];
-
-    return {
-      files,
-      outputHtml,
-      codeUrl,
-      title,
-      description,
-      stdout,
-      help: args.help,
-      version: args.version
-    };
+const COMMENT_PATTERNS = [
+  {
+    test: (s: string) => s.startsWith('/*'),
+    clean: (s: string) => s
+      .replace(/^\/\*\*?/, '')
+      .replace(/\*\/$/, '')
+      .split('\n')
+      .map(line => line.replace(/^\s*\*\s?/, ''))
+      .join('\n')
+      .trim()
+  },
+  {
+    test: (s: string) => s.startsWith('//'),
+    clean: (s: string) => s
+      .split('\n')
+      .map(line => line.replace(/^\s*\/\/\s?/, ''))
+      .join('\n')
+      .trim()
+  },
+  {
+    test: (s: string) => s.startsWith('#'),
+    clean: (s: string) => s
+      .split('\n')
+      .map(line => line.replace(/^\s*#\s?/, ''))
+      .join('\n')
+      .trim()
+  },
+  {
+    test: (s: string) => s.startsWith('<!--'),
+    clean: (s: string) => s.replace(/^<!--/, '').replace(/-->$/, '').trim()
+  },
+  {
+    test: (s: string) => s.startsWith('--'),
+    clean: (s: string) => s
+      .split('\n')
+      .map(line => line.replace(/^\s*--\s?/, ''))
+      .join('\n')
+      .trim()
   }
-  
-  return initialOptions;
-}
+];
 
 function getFileExtension(filename: string): string {
   const match = filename.match(/\.[^.]+$/);
@@ -602,59 +517,13 @@ function getFileExtension(filename: string): string {
  * - SQL comments
  */
 function extractCommentContent(rawComment: string): string {
-  // Language-agnostic comment content extraction
-  // Tree-sitter gives us the full comment including delimiters
-  // We need to strip common comment patterns
+  const content = rawComment.trim();
   
-  let content = rawComment.trim();
-  
-  // Handle C-style block comments: /* ... */ or /** ... */
-  if (content.startsWith('/*')) {
-    content = content
-      .replace(/^\/\*\*?/, '')  // Remove opening /* or /**
-      .replace(/\*\/$/, '')     // Remove closing */
-      .split('\n')
-      .map(line => {
-        // Remove leading * and whitespace from each line
-        const cleaned = line.replace(/^\s*\*\s?/, '');
-        return cleaned;
-      })
-      .join('\n')
-      .trim();
+  for (const pattern of COMMENT_PATTERNS) {
+    if (pattern.test(content)) {
+      return pattern.clean(content);
+    }
   }
-  // Handle C++/JS/TS style line comments: // ...
-  else if (content.startsWith('//')) {
-    content = content
-      .split('\n')
-      .map(line => line.replace(/^\s*\/\/\s?/, ''))
-      .join('\n')
-      .trim();
-  }
-  // Handle Python/Ruby/Shell style comments: # ...
-  else if (content.startsWith('#')) {
-    content = content
-      .split('\n')
-      .map(line => line.replace(/^\s*#\s?/, ''))
-      .join('\n')
-      .trim();
-  }
-  // Handle HTML/XML comments: <!-- ... -->
-  else if (content.startsWith('<!--')) {
-    content = content
-      .replace(/^<!--/, '')
-      .replace(/-->$/, '')
-      .trim();
-  }
-  // Handle SQL comments: -- ...
-  else if (content.startsWith('--')) {
-    content = content
-      .split('\n')
-      .map(line => line.replace(/^\s*--\s?/, ''))
-      .join('\n')
-      .trim();
-  }
-  // For any other comment style, just return as-is
-  // Tree-sitter should have already identified it as a comment
   
   return content;
 }
@@ -1078,7 +947,7 @@ async function generateMultiFileHTML(processedFiles: ProcessedFile[], customTitl
  */
 async function main() {
   try {
-    const options = await parseCommandLineArgsWithArgfile();
+    const options = await parseCommandLineArgs();
     
     if (!options.stdout) {
       console.log(`Processing ${options.files.length} file(s): ${options.files.join(', ')}`);

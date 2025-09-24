@@ -1,4 +1,4 @@
-# literate-code-ts
+# sloppo
 
 This is a tool that allows you to generate literate programming documentation for your code.
 
@@ -8,9 +8,7 @@ It's an inverted tool -> You write markdown in comments in code files, invoke th
 order you want to process files in, and then you get an HTML file with markdown comments on the left
 and syntax highlighted code on the right. 
 
-You can see an example of the tool running on itself: link to example
-
-Name is a placeholder for something more clever.[^1]
+You can see an example of the tool running on itself in sloppo.html
 
 # Supported languages
 
@@ -18,11 +16,12 @@ The `LANGUAGE_MAP` and `SHIKI_LANGUAGE_MAP` at the top control language support.
 
 Currently supported languages:
 - C 
+- .ld Linker scripts
 - JavaScript & TypeScript
 
 # How to invoke
 
-> ./literate-code-ts.ts tests/c/hello-world.c tests/c/indentation-test.c -o docs.html
+> ./sloppo.ts tests/c/hello-world.c tests/c/indentation-test.c -o docs.html
 
 The files will be processed in the order given
 
@@ -30,11 +29,15 @@ One additional useful option is `--code-url` -- this will link source files with
 prefix, so it can be set to e.g. a GitHub repository to view the source directly.
 
 Since you might want to use it over and over again, you can put these arguments into an argfile and
-then invoke with `--argfile` to get the arguments from that file.
+then invoke with `--argfile` to get the arguments from that file, ex:
+
+> ./sloppo.ts --argfile self-doc.argfile 
+
+to generate `sloppo.html`.
 
 Use
 
-> ./literate-code-ts --help
+> ./sloppo.ts --help
 
 To see all the options.
 

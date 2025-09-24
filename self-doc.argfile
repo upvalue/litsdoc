@@ -1,0 +1,5 @@
+sloppo.ts
+--output-html sloppo.html
+--title "Sloppo - Source Documentation"
+--description "This is the **self-documenting source code** for sloppo. The tool has been run on its own source to demonstrate literate programming principles. Each section explains how the tool works, from parsing source files with tree-sitter to generating responsive HTML documentation."
+--code-url "https://github.com/user/literate-code-ts/tree/main/"
