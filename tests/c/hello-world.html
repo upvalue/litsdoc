@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My C Project</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+  <div class="max-w-7xl mx-auto">
+    <header class="py-8 px-6 bg-white shadow-sm border-b">
+      <h1 class="text-3xl font-bold text-gray-900">My C Project</h1>
+      <div class="text-gray-600 mt-2 prose prose-sm prose-gray max-w-none"><p>This is <strong>documentation</strong> for my <em>C project</em> with markdown support!</p>
+</div>
+    </header>
+    
+    <main class="block lg:flex min-h-screen">
+      
+    
+    <!-- File Header: tests/c/hello-world.c -->
+    <div class="bg-gray-100 border-b-2 border-gray-300 lg:hidden w-full">
+      <div class="w-full lg:w-2/5 bg-gray-50 border-r border-gray-300">
+        <div class="p-6">
+          <h2 class="text-xl font-semibold text-gray-800 mb-2">
+            <svg class="inline-block w-4 h-4 mr-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
+            </svg>
+            hello-world.c
+          </h2>
+        </div>
+      </div>
+      <div class="hidden lg:block w-3/5 bg-gray-100">
+        <div class="p-6">
+          <div class="h-full min-h-[3rem] flex items-center">
+            <span class="text-gray-500 text-sm italic">Source file</span>
+          </div>
+        </div>
+      </div>
+    </div>
+          <div class="bg-white border-b border-gray-200 lg:hidden">
+            <div class="p-6">
+              <div class="prose prose-sm prose-gray max-w-none">
+                <p><code class="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">hello-world.c</code> - a brief hello world in C.<br>This is a literate program</p>
+
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border-b border-gray-200 lg:hidden">
+            <div class="p-6">
+              <div class="prose prose-sm prose-gray max-w-none">
+                <p>We start by including stdio.h (&quot;standard input and output&quot;)<br>a header that allows us to use some functions for input and output</p>
+
+              </div>
+            </div>
+          </div>
+            <div class="bg-gray-900 border-b border-gray-200 lg:hidden">
+              <div class="p-6">
+                <pre class="text-sm leading-relaxed overflow-x-auto" style="background-color: transparent; padding: 0; margin: 0;" tabindex="0"><code style="background-color: transparent;"><span class="line"><span style="color:#F97583">#include</span><span style="color:#9ECBFF"> &#x3C;stdio.h></span></span></code></pre>
+              </div>
+            </div>
+          <div class="bg-white border-b border-gray-200 lg:hidden">
+            <div class="p-6">
+              <div class="prose prose-sm prose-gray max-w-none">
+                <p>The main function is executed when our program starts.<br>It returns an int to tell the operating system<br>whether it was successful or failed</p>
+
+              </div>
+            </div>
+          </div>
+            <div class="bg-gray-900 border-b border-gray-200 lg:hidden">
+              <div class="p-6">
+                <pre class="text-sm leading-relaxed overflow-x-auto" style="background-color: transparent; padding: 0; margin: 0;" tabindex="0"><code style="background-color: transparent;"><span class="line"><span style="color:#F97583">int</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">void</span><span style="color:#E1E4E8">) {</span></span></code></pre>
+              </div>
+            </div>
+          <div class="bg-white border-b border-gray-200 lg:hidden">
+            <div class="p-6">
+              <div class="prose prose-sm prose-gray max-w-none">
+                <p>Print hello world to the user</p>
+
+              </div>
+            </div>
+          </div>
+            <div class="bg-gray-900 border-b border-gray-200 lg:hidden">
+              <div class="p-6">
+                <pre class="text-sm leading-relaxed overflow-x-auto" style="background-color: transparent; padding: 0; margin: 0;" tabindex="0"><code style="background-color: transparent;"><span class="line"><span style="color:#B392F0">printf</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hello, world!</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span></code></pre>
+              </div>
+            </div>
+          <div class="bg-white border-b border-gray-200 lg:hidden">
+            <div class="p-6">
+              <div class="prose prose-sm prose-gray max-w-none">
+                <p>Return zero, indicating succcess</p>
+
+              </div>
+            </div>
+          </div>
+            <div class="bg-gray-900 border-b border-gray-200 lg:hidden">
+              <div class="p-6">
+                <pre class="text-sm leading-relaxed overflow-x-auto" style="background-color: transparent; padding: 0; margin: 0;" tabindex="0"><code style="background-color: transparent;"><span class="line"><span style="color:#F97583">return</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+              </div>
+            </div>
+          <div class="bg-white border-b border-gray-200 lg:hidden">
+            <div class="p-6">
+              <div class="prose prose-sm prose-gray max-w-none">
+                <p>This program can be compiled and run with:<br><code class="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">cc -o hello-world ./hello-world.c &amp;&amp; ./hello-world</code></p>
+
+              </div>
+            </div>
+          </div>
+    <div class="hidden lg:flex lg:flex-col w-full">
+      
+    <!-- File Header: tests/c/hello-world.c -->
+    <div class="bg-gray-100 border-b-2 border-gray-300 lg:flex w-full">
+      <div class="w-full lg:w-2/5 bg-gray-50 border-r border-gray-300">
+        <div class="p-6">
+          <h2 class="text-xl font-semibold text-gray-800 mb-2">
+            <svg class="inline-block w-4 h-4 mr-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
+            </svg>
+            hello-world.c
+          </h2>
+        </div>
+      </div>
+      <div class="hidden lg:block w-3/5 bg-gray-100">
+        <div class="p-6">
+          <div class="h-full min-h-[3rem] flex items-center">
+            <span class="text-gray-500 text-sm italic">Source file</span>
+          </div>
+        </div>
+      </div>
+    </div>
+            <div class="hidden lg:flex w-full">
+              <div class="w-2/5 bg-white border-r border-gray-200">
+                <div class="p-6">
+                  <div class="prose prose-sm prose-gray max-w-none">
+                    <p><code class="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">hello-world.c</code> - a brief hello world in C.<br>This is a literate program</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="w-3/5 bg-gray-900">
+                <div class="p-6">
+                  <div class="h-full min-h-[4rem]"></div>
+                </div>
+              </div>
+            </div>
+            <div class="hidden lg:flex w-full">
+              <div class="w-2/5 bg-white border-r border-gray-200">
+                <div class="p-6">
+                  <div class="prose prose-sm prose-gray max-w-none">
+                    <p>We start by including stdio.h (&quot;standard input and output&quot;)<br>a header that allows us to use some functions for input and output</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="w-3/5 bg-gray-900">
+                <div class="p-6">
+                  <pre class="text-sm leading-relaxed overflow-x-auto" style="background-color: transparent; padding: 0; margin: 0;" tabindex="0"><code style="background-color: transparent;"><span class="line"><span style="color:#F97583">#include</span><span style="color:#9ECBFF"> &#x3C;stdio.h></span></span></code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="hidden lg:flex w-full">
+              <div class="w-2/5 bg-white border-r border-gray-200">
+                <div class="p-6">
+                  <div class="prose prose-sm prose-gray max-w-none">
+                    <p>The main function is executed when our program starts.<br>It returns an int to tell the operating system<br>whether it was successful or failed</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="w-3/5 bg-gray-900">
+                <div class="p-6">
+                  <pre class="text-sm leading-relaxed overflow-x-auto" style="background-color: transparent; padding: 0; margin: 0;" tabindex="0"><code style="background-color: transparent;"><span class="line"><span style="color:#F97583">int</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">void</span><span style="color:#E1E4E8">) {</span></span></code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="hidden lg:flex w-full">
+              <div class="w-2/5 bg-white border-r border-gray-200">
+                <div class="p-6">
+                  <div class="prose prose-sm prose-gray max-w-none">
+                    <p>Print hello world to the user</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="w-3/5 bg-gray-900">
+                <div class="p-6">
+                  <pre class="text-sm leading-relaxed overflow-x-auto" style="background-color: transparent; padding: 0; margin: 0;" tabindex="0"><code style="background-color: transparent;"><span class="line"><span style="color:#B392F0">printf</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hello, world!</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span></code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="hidden lg:flex w-full">
+              <div class="w-2/5 bg-white border-r border-gray-200">
+                <div class="p-6">
+                  <div class="prose prose-sm prose-gray max-w-none">
+                    <p>Return zero, indicating succcess</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="w-3/5 bg-gray-900">
+                <div class="p-6">
+                  <pre class="text-sm leading-relaxed overflow-x-auto" style="background-color: transparent; padding: 0; margin: 0;" tabindex="0"><code style="background-color: transparent;"><span class="line"><span style="color:#F97583">return</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="hidden lg:flex w-full">
+              <div class="w-2/5 bg-white border-r border-gray-200">
+                <div class="p-6">
+                  <div class="prose prose-sm prose-gray max-w-none">
+                    <p>This program can be compiled and run with:<br><code class="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">cc -o hello-world ./hello-world.c &amp;&amp; ./hello-world</code></p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="w-3/5 bg-gray-900">
+                <div class="p-6">
+                  <div class="h-full min-h-[4rem]"></div>
+                </div>
+              </div>
+            </div>
+    </div>
+    </main>
+  </div>
+</body>
+</html>
