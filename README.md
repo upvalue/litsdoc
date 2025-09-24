@@ -20,6 +20,7 @@ Currently supported languages:
 - C 
 - .ld Linker scripts
 - JavaScript & TypeScript
+- Rust
 
 # How to invoke
 
