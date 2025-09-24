@@ -18,6 +18,7 @@
 import Parser from "npm:tree-sitter@^0.21.0";
 import C from "npm:tree-sitter-c@^0.21.0";
 import JavaScript from "npm:tree-sitter-javascript@^0.21.0";
+import Rust from "npm:tree-sitter-rust@^0.21.0";
 import { codeToHtml } from "npm:shiki@^1.0.0";
 import { marked } from "npm:marked@^12.0.0";
 import { parseArgs } from "jsr:@std/cli/parse-args";
@@ -31,8 +32,8 @@ import { parseArgs } from "jsr:@std/cli/parse-args";
  * to extract comments from any supported language without hardcoding
  * comment syntax.
  * 
- * Currently supports: C, C headers, JavaScript, TypeScript, and ES modules.
- * Python and Rust are ready to be added when their parsers are imported.
+ * Currently supports: C, C headers, JavaScript, TypeScript, ES modules, and Rust.
+ * Python is ready to be added when its parser is imported.
  * Linker scripts (.ld) use regex-based comment extraction as fallback.
  */
 const LANGUAGE_MAP = {
@@ -41,9 +42,9 @@ const LANGUAGE_MAP = {
   '.js': JavaScript,
   '.ts': JavaScript, // TypeScript uses same parser for comments
   '.mjs': JavaScript,
+  '.rs': Rust,
   '.ld': null, // Linker scripts use regex fallback
   // '.py': Python,
-  // '.rs': Rust,
 };
 
 /**
@@ -714,7 +715,8 @@ async function parseSourceFile(inputFile: string): Promise<LiterateBlock[]> {
   
   function traverse(node: any) {
     try {
-      if (node.type === 'comment') {
+      // Check for different comment node types across languages
+      if (node.type === 'comment' || node.type === 'line_comment' || node.type === 'block_comment') {
         const startLine = node.startPosition.row;
         const endLine = node.endPosition.row;
         const content = node.text;
