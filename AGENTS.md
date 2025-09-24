@@ -1,4 +1,4 @@
-# Sloppo - Development Log
+# litsdoc - Development Log
 
 ## Project Overview
 A literate programming tool implemented in Deno that generates HTML documentation from source code comments using tree-sitter for language-agnostic parsing.
@@ -88,13 +88,13 @@ interface LiterateBlock {
 
 ## Command Line Usage
 ```bash
-./sloppo.ts <input-file> [--output-html <output-file>]
+./litsdoc.ts <input-file> [--output-html <output-file>]
 ```
 
 **Examples:**
 ```bash
-./sloppo.ts tests/c/hello-world.c
-./sloppo.ts tests/js/example.js --output-html docs.html
+./litsdoc.ts tests/c/hello-world.c
+./litsdoc.ts tests/js/example.js --output-html docs.html
 ```
 
 ## Development Challenges Solved
@@ -126,8 +126,8 @@ interface LiterateBlock {
 
 ## File Structure
 ```
-literate-code-ts/
-├── literate-code-ts.ts     # Main implementation
+litsdoc/
+├── litsdoc.ts              # Main implementation
 ├── deno.json               # Deno configuration
 ├── CLAUDE.md               # This documentation
 ├── README.md               # Project description

@@ -1,4 +1,5 @@
 self-doc:
-  ./sloppo.ts --argfile self-doc.argfile
+  ./litsdoc.ts --argfile self-doc.argfile
+
 test: 
-  ./sloppo-test.ts
+  ./litsdoc.ts

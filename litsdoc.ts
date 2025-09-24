@@ -1,7 +1,7 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-env --allow-ffi
 
 /**
- * # Sloppo
+ * # litsdoc
  * 
  * A literate programming tool that transforms source code into beautiful,
  * readable documentation. This tool extracts comments from source files
@@ -396,7 +396,7 @@ async function parseCommandLineArgs(): Promise<CommandLineOptions> {
 
   if (args.help) {
     console.log(`
-Usage: literate-code-ts.ts [file1] [file2] [...] [options]
+Usage: litsdoc.ts [file1] [file2] [...] [options]
 
 Options:
   -h, --help                    Show this help message
@@ -409,24 +409,24 @@ Options:
   -f, --argfile <file>          Read arguments from file (overrides CLI args)
 
 Examples:
-  literate-code-ts.ts hello.c
-  literate-code-ts.ts a.c b.js --output-html docs.html
-  literate-code-ts.ts hello.c --stdout > docs.html
-  literate-code-ts.ts *.c --code-url https://github.com/user/repo/tree/main/
-  literate-code-ts.ts --title "My Project" --description "**Documentation** for my project"
-  literate-code-ts.ts --argfile myproject.argfile
+  litsdoc.ts hello.c
+  litsdoc.ts a.c b.js --output-html docs.html
+  litsdoc.ts hello.c --stdout > docs.html
+  litsdoc.ts *.c --code-url https://github.com/user/repo/tree/main/
+  litsdoc.ts --title "My Project" --description "**Documentation** for my project"
+  litsdoc.ts --argfile myproject.argfile
     `);
     Deno.exit(0);
   }
 
   if (args.version) {
-    console.log("literate-code-ts v1.2.0");
+    console.log("litsdoc v1.2.0");
     Deno.exit(0);
   }
 
   if (args._.length < 1) {
     console.error('Error: At least one input file is required');
-    console.error('Usage: literate-code-ts.ts [file1] [file2] [...] [options]');
+    console.error('Usage: litsdoc.ts [file1] [file2] [...] [options]');
     console.error('Use --help for more information');
     Deno.exit(1);
   }
