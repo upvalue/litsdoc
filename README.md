@@ -8,7 +8,8 @@ It's an inverted tool -> You write markdown in comments in code files, invoke th
 order you want to process files in, and then you get an HTML file with markdown comments on the left
 and syntax highlighted code on the right. 
 
-You can see an example of the tool running on itself in sloppo.html
+You can see an example of the tool running on itself in sloppo.html, or view it online at:
+**[🌐 Live Demo - Sloppo Documentation](https://upvalue.github.io/sloppo/sloppo.html)**
 
 # Supported languages
 

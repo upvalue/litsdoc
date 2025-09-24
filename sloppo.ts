@@ -1,7 +1,7 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-env --allow-ffi
 
 /**
- * # Literate Code TypeScript
+ * # Sloppo
  * 
  * A literate programming tool that transforms source code into beautiful,
  * readable documentation. This tool extracts comments from source files
